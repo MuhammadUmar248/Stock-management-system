@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 45px;
+  margin-right: 45px;
+}
+
+
+
