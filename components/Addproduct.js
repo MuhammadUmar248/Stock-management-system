@@ -119,7 +119,7 @@ export default function Addproduct() {
   return (
     <>
 
-      <div className="flex justify-end items-center">
+      <div className="flex justify-end py-4">
         <button
           onClick={openModal}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none"
