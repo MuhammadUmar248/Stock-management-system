@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "cross-env NEXT_DISABLE_SWC=1 next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -11,6 +11,7 @@
   "dependencies": {
     "antd": "^5.17.2",
     "autoprefixer": "^10.4.20",
+    "cross-env": "^7.0.3",
     "mongodb": "6.5",
     "next": "14.2.2",
     "react": "^18",
