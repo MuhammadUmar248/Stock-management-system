@@ -11,6 +11,7 @@ export const Header = () => {
           <span className="ml-3 text-3xl">Stock Management System</span>
         </a>
       </div>
+      <hr></hr>
     </header>
   )
 }

@@ -13,22 +13,13 @@ export default function Display() {
   const [hoveredRow, setHoveredRow] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [productForm, setProductForm] = useState({})
-  const [existingProducts, setExistingProducts] = useState([]);
   const [requestProcessing, setRequestProcessing] = useState(false);
   const [update, setUpdate] = useState({});
-
-
-
-
-
+  const [isFormChanged, setIsFormChanged] = useState(false);
+  const [currentSlug, setCurrentSlug] = useState("");
 
 
   const { value, setValue, setFormval, formval, setLoading, loading } = useMyContext();
-
-
-
-
-
 
 
   useEffect(() => {
@@ -87,6 +78,7 @@ export default function Display() {
   };
 
   const handleEdit = (item) => {
+    setCurrentSlug(item.slug)
     setShowModal(true);
     setFormval(true)
     setProductForm({ slug: item.slug, quantity: item.quantity, price: item.price })
@@ -97,10 +89,14 @@ export default function Display() {
 
     setShowModal(false);
     setFormval(false)
+    setIsFormChanged(false);
+
   };
 
   const handelChange = (e) => {
     setProductForm({ ...productForm, [e.target.name]: e.target.value })
+    setIsFormChanged(true);
+
   }
 
   const updateProduct = async (e) => {
@@ -117,8 +113,6 @@ export default function Display() {
       return;
     } else {
       const slugNames = value.map(item => item.slug);
-      setExistingProducts(slugNames)
-      const currentSlug = productForm.slug;
       const productExists = slugNames.some(existingSlug => existingSlug === productForm.slug && existingSlug !== currentSlug);
 
       if (productExists) {
@@ -149,6 +143,7 @@ export default function Display() {
           if (response.ok) {
             message.destroy()
             message.success("Product Update Successfully")
+            setIsFormChanged(false);
 
             fetchProducts();
             setProductForm({});
@@ -181,9 +176,9 @@ export default function Display() {
       <table className="table-auto w-full">
         <thead>
           <tr>
-            <th className="px-4 py-2">Product Name</th>
-            <th className="px-4 py-2">Quantity</th>
-            <th className="px-4 py-2">Price</th>
+            <th className="pr-4 py-2 text-left pl-5">Product Name</th>
+            <th className="pr-4 py-2 text-left pl-5">Quantity</th>
+            <th className="pr-4 py-2 text-left pl-5">Price</th>
           </tr>
         </thead>
         <tbody>
@@ -218,10 +213,10 @@ export default function Display() {
                       {hoveredRow === items.slug && (
                         <td className="md:absolute md:top-0 md:right-0 md:mt-2 md:mr-2 border">
                           <div className="flex flex-col md:flex-row md:gap-2 gap-1">
-                            <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-1  rounded md:px-2 md:py-1" onClick={() => handleEdit(items)}>
+                            <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-1 rounded" onClick={() => handleEdit(items)}>
                               Edit
                             </button>
-                            <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded md:px-2 md:py-1" onClick={() => handleDelete(items._id)}
+                            <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded" onClick={() => handleDelete(items._id)}
                             >
                               Delete
                             </button>
@@ -234,7 +229,7 @@ export default function Display() {
               )}
         </tbody>
       </table>
-     
+
 
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
@@ -275,7 +270,7 @@ export default function Display() {
                 </div>
               </div>
               <div className="flex justify-center">
-                <button onClick={updateProduct} type="submit" className="bg-blue-500 text-white px-4 py-2 border rounded-lg inline-flex items-center"> Update  </button>
+                <button onClick={updateProduct} disabled={!isFormChanged} type="submit" className={`bg-blue-500 text-white px-4 py-2 border rounded-lg inline-flex items-center ${!isFormChanged && 'opacity-50 cursor-not-allowed'}`}> Update  </button>
               </div>
             </div>
           </div>
